@@ -1,0 +1,21 @@
+
+.table tbody tr td.actions {
+    padding: 8px;
+    text-align: center;
+}
+.table tbody tr td.actions .edit, .table tbody tr td.actions .trash, .table tbody tr td.actions .show{
+    display: inline-flex;
+    text-align: right;
+    text-decoration: none;
+    color: #FFFFFF;
+    padding: 10px 12px;
+}
+
+
+
+.table tbody tr td.actions .show {
+    background-color: #3780b7;
+}
+.table tbody tr td.actions .show:hover {
+    background-color: #319ca3;
+}
