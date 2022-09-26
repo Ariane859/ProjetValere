@@ -521,9 +521,9 @@
                                 // Attempt select query execution
                                 $sql = "SELECT distinct * FROM compteclient";
                                 if($result = $pdo->query($sql)){
-                                    if($result->rowCount() > 0){ ?>
+                                    if($result->rowCount() > 0){?>
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
+                                            <thead style="background-color:#EEEEEE">
                                                 <tr>
                                                     <th>Nom</th>
                                                     <th>Prénom</th>
@@ -537,16 +537,33 @@
                                             <tbody>
                                             <?php while($row = $result->fetch()){ ?>
                                                 <tr>
-                                                    <td><?php $row['nomPersonne'] ?></td>
-                                                    <td><?php $row['prenomPersonne'] ?></td>
-                                                    <td><?php $row['email'] ?></td>
-                                                    <td><?php $row['telephone'] ?></td>
-                                                    <td><?php $row['ville'] ?></td>
-                                                    <td><?php $row['dateCreation'] ?></td>
+                                                    <td><?php echo $row['nomPersonne'] ?></td>
+                                                    <td><?php echo $row['prenomPersonne'] ?></td>
+                                                    <td><?php echo $row['email'] ?></td>
+                                                    <td><?php echo $row['telephone'] ?></td>
+                                                    <td><?php echo $row['ville'] ?></td>
+                                                    <td><?php echo $row['dateCreation'] ?></td>
                                                     <td class="actions">
-
-                                                        <a href="#" class="btn btn-primary edit"><i class="fa fa-edit fa-xs"></i></a>
-                                                        <a href="#" class="btn btn-danger trash"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-default dropdown-toggle" title='action' id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fa fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <!-- <div class="dropdown-menu" style="position:absolute;top:-20px;left:-100px;width:0%;border:0.2px solid rgba(40,40,40,0.08);height:74px;margin-top:0px" aria-labelledby="dropdownMenuButton">
+                                                                <div class="text-center" style="display:flex;height:50%;flex-direction:column;border-bottom: 0.5px solid rgba(40,40,40,0.08);align-items:start;justify-content:center;width: 100%;">
+                                                                    <a class="voir tooltipped modal-trigger1" data-value='voir' id="voir" data-compte="{{ item.numCompte }}" data-solde="{% if rout == 'nouveau_precalcul' %}{% if item.soldeCompte == null %}-- {% else %}{{ item.soldeCompte|trim }}{% endif %}{% else %} {% for items in sqlSolde %}{% if items.intitule|trim == item.intitule|trim %} {% if items.soldeCompte == null %}-- {% else %}{{ items.soldeCompte|number_format(0, '.', '')|trim }}{% endif %}{% endif %}{% endfor %}{% endif %}" data-toggle="modal" href="#myModal" style="cursor:pointer;font-weight:500;text-decoration:none;color:black">
+                                                                        &nbsp; &nbsp;<span class="glyphicon glyphicon-eye-open" style="color:black"></span> &nbsp;Voir
+                                                                    </a>
+                                                                </div>
+                                                                <div class="text-center" style="display:flex;height:50%;flex-direction:column;align-items:start;justify-content:center;width: 100%;">
+                                                                    <a {% if item.estFacturer|trim == true %} data-toggle="modal" href="#Modal2" style="pointer-events: none;color:gray;cursor:not-allowed" {% else %} style="cursor:pointer;font-weight:500;text-decoration:none;color:black" {% endif %} 
+                                                                        class="facturer" id="facturer" data-value='facturer' data-solde="{% if rout == 'nouveau_precalcul' %}{% if item.soldeCompte == null %}-- {% else %}{{ item.soldeCompte|trim }}{% endif %}{% else %} {% for items in sqlSolde %}{% if items.intitule|trim == item.intitule|trim %} {% if items.soldeCompte == null %}-- {% else %}{{ items.soldeCompte|number_format(0, '.', '')|trim }}{% endif %}{% endif %}{% endfor %}{% endif %}" data-frais="{{ item.fraisTenuCompte|trim }}" data-engagement="{{ item.engagement|trim }}" data-compte="{{ item.numCompte }}" >
+                                                                        &nbsp; &nbsp;<span class="glyphicon glyphicon-file" {% if item.estFacturer|trim == true %} style="pointer-events: none;color:gray;cursor: no-drop" {% else %} style="color:black" {% endif %}></span> &nbsp;Facturer
+                                                                    </a>
+                                                                </div>       
+                                                            </div> -->
+                                                        </div> 
+                                                        <!-- <a href="#" class="btn btn-primary edit"><i class="fa fa-edit fa-xs"></i></a>
+                                                        <a href="#" class="btn btn-danger trash"><i class="fas fa-trash-alt fa-xs"></i></a> -->
                                                     </td>
                                                 </tr>
                                             <?php } ?>

@@ -1,12 +1,75 @@
 <?php 
     session_start();
-
+    require("connexion.php");
+    $message="";
+    if (isset($_POST['submit']) && isset($_POST['nomClient']) && isset($_POST['prenomClient']) && isset($_POST['pays']) && isset($_POST['ville']) &&
+    isset($_POST['email']) && isset($_POST['telPrincipal']) && isset($_POST['telFixe']) && isset($_POST['sexe']) && isset($_POST['metier'])) 
+    {
+        $nom=trim($_POST['nomClient']);
+        $prenom=trim($_POST['prenomClient']);
+        $pays=trim($_POST['pays']);
+        $ville=trim($_POST['ville']);
+        $email=trim($_POST['email']);
+        $telPrincipal=trim($_POST['telPrincipal']);
+        $telFixe=trim($_POST['telFixe']);
+        $sexe=trim($_POST['sexe']);
+        $metier=trim($_POST['metier']);
+        $observation=trim($_POST['observation']);
+        $createur=$_SESSION['username'];
+        $date=date('Y-m-d H:i:s');
+        // if (!filter_var($input_name,FILTER_VALIDATE_REGEXP,array("options"=>array("regexp"=>"/^[a-zA-Z'\s]*$/")))) 
+        // {
+        //     var_dump($input_name);
+        // }
+        // else {
+        //     echo 'Tout va bien';
+        // }
+        $sqlInsertClient="INSERT INTO compteclient (nomPersonne,prenomPersonne,email,numeroFixe,telephone,sexe,metier,paysDeResidence,ville,typeClient,estActif,dateCreation,dateModification,observation,supprimer,createur)
+        VALUES(:nomPersonne,:prenomPersonne,:email,:numeroFixe,:telephone,:sexe,:metier,:paysDeResidence,:ville,:typeClient,:estActif,:dateCreation,:dateModification,:observation,:supprimer,:createur)";
+        $statement=$pdo->prepare($sqlInsertClient);
+        
+        $result=$statement->execute(array(
+            ":nomPersonne"=>$nom,
+            ":prenomPersonne"=>$prenom,
+            ":email"=>$email,
+            ":numeroFixe"=>$telFixe,
+            ":telephone"=>$telPrincipal,
+            ":sexe"=>$sexe,
+            ":metier"=>$metier,
+            ":paysDeResidence"=>$pays,
+            ":ville"=>$ville,
+            ":typeClient"=>'',
+            ":estActif"=>1,
+            ":dateCreation"=>$date,
+            ":dateModification"=>$date,
+            ":observation"=>$observation,
+            ":supprimer"=>0,
+            "createur"=>$createur
+        ));
+        if ($result) 
+        {
+            $message='<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Enregistrement effectué avec succès</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        }
+        else 
+        {
+            $message='<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Une erreur s\'est produite.Veuillez réessayer !!!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,10 +86,9 @@
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/cient.css">
+    <link rel="stylesheet" href="css/addclient.css">
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -278,101 +340,114 @@
                             <div class="col-md-12">
                                 <nav aria-label="breadcrumb" style="height:60px;">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="#">Clients</a></li>
+                                        <li class="breadcrumb-item"><a href="client.php">Clients</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Créer</li>
                                     </ol>
                                 </nav>
                             </div>
                         </div>
                         
-                    <!-- <div class="row" style="height:60px;">
-                        <div class="col-md-2">
+                    <div class="row" style="height:60px;">
+                        <!-- <div class="col-md-2">
                             <h2 class="pull-left" style="font-weight:bold;">Nouveau Client</h2>
-                        </div>
-                        <div class="col-md-8"></div>
+                        </div> -->
+                        <div class="col-md-10"></div>
                         <div class="col-md-2">
-                            <a href="addclient.php" class="btn btn-primary pull-right"><i class="fa fa-alt"></i>Liste Clients</a>
+                            <a href="client.php" class="btn btn-primary pull-right"><i class="fa fa-alt"></i>Liste Clients</a>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- <button class="btn btn-primary" type="button">
                         <i class="fas fa-search fa-sm"></i>
-                    </button> -->
-
+                    </button>-->
+                    <div class="form-group">
+                            <?php echo $message; ?>    
+                    </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Nouveau Client</h6>
+                        </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="">Nom</label>
-                                    <input type="text" class="form-control">
+                            <form action="" method="POST">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="nomClient">Nom&nbsp;<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" name="nomClient" id="nomClient" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="prenomClient">Prénom&nbsp;<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" name="prenomClient" id="prenomClient" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="pays">Pays De Résidence&nbsp;<span style="color:red">*</span></label>
+                                            <input type="pays" class="form-control" name="pays" id="pays" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="">Prénom</label>
-                                    <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="ville">Ville&nbsp;<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" name="ville" id="ville" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" name="email" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="telPrincipal">Tel Principal&nbsp;<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" name="telPrincipal" id="telPrincipal" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-3" style="padding-left:25px">
-                                    <label for="">Ville</label>
-                                    <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="telFixe">Tel Fixe</label>
+                                            <input type="text" class="form-control" name="telFixe" id="telFixe">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="sexe">Sexe&nbsp;<span style="color:red">*</span></label>
+                                            <select name="sexe" id="sexe" class="form-control">
+                                                <option value="M">Masculin</option>
+                                                <option value="F">Féminin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="metier">Métier&nbsp;<span style="color:red">*</span></label>
+                                            <select name="metier" class="form-control" name="metier" id="metier" placeholder="Cliquez ici">
+                                                <option value="Etudiant">Etudiant(e)</option>
+                                                <option value="Commercant">Commercant(e)</option>
+                                                <option value="Artisant">Artisant</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="">Email</label>
-                                    <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="observation">Observation</label>
+                                            <textarea name="observation" id="observation" cols="3" rows="2" class="form-control"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="">Nom</label>
-                                    <input type="text" class="form-control">
+                                <div class="form-group">
+                                    <input type="submit" name="submit" id="submit" class="form-submit btn btn-primary" value="Enregistrer"/>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="">Prénom</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3" style="padding-left:25px">
-                                    <label for="">Ville</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="">Email</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="">Nom</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="">Prénom</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3" style="padding-left:25px">
-                                    <label for="">Ville</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="">Email</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label for="">Nom</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="">Prénom</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3" style="padding-left:25px">
-                                    <label for="">Ville</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="">Email</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
 
