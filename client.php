@@ -544,23 +544,15 @@
                                                     <td><?php echo $row['ville'] ?></td>
                                                     <td><?php echo $row['dateCreation'] ?></td>
                                                     <td class="actions">
-                                                        <div class="dropdown">
+                                                        <div class="btn-group">
                                                             <button class="btn btn-default dropdown-toggle" title='action' id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fa fa-ellipsis-v"></i>
                                                             </button>
-                                                            <!-- <div class="dropdown-menu" style="position:absolute;top:-20px;left:-100px;width:0%;border:0.2px solid rgba(40,40,40,0.08);height:74px;margin-top:0px" aria-labelledby="dropdownMenuButton">
-                                                                <div class="text-center" style="display:flex;height:50%;flex-direction:column;border-bottom: 0.5px solid rgba(40,40,40,0.08);align-items:start;justify-content:center;width: 100%;">
-                                                                    <a class="voir tooltipped modal-trigger1" data-value='voir' id="voir" data-compte="{{ item.numCompte }}" data-solde="{% if rout == 'nouveau_precalcul' %}{% if item.soldeCompte == null %}-- {% else %}{{ item.soldeCompte|trim }}{% endif %}{% else %} {% for items in sqlSolde %}{% if items.intitule|trim == item.intitule|trim %} {% if items.soldeCompte == null %}-- {% else %}{{ items.soldeCompte|number_format(0, '.', '')|trim }}{% endif %}{% endif %}{% endfor %}{% endif %}" data-toggle="modal" href="#myModal" style="cursor:pointer;font-weight:500;text-decoration:none;color:black">
-                                                                        &nbsp; &nbsp;<span class="glyphicon glyphicon-eye-open" style="color:black"></span> &nbsp;Voir
-                                                                    </a>
-                                                                </div>
-                                                                <div class="text-center" style="display:flex;height:50%;flex-direction:column;align-items:start;justify-content:center;width: 100%;">
-                                                                    <a {% if item.estFacturer|trim == true %} data-toggle="modal" href="#Modal2" style="pointer-events: none;color:gray;cursor:not-allowed" {% else %} style="cursor:pointer;font-weight:500;text-decoration:none;color:black" {% endif %} 
-                                                                        class="facturer" id="facturer" data-value='facturer' data-solde="{% if rout == 'nouveau_precalcul' %}{% if item.soldeCompte == null %}-- {% else %}{{ item.soldeCompte|trim }}{% endif %}{% else %} {% for items in sqlSolde %}{% if items.intitule|trim == item.intitule|trim %} {% if items.soldeCompte == null %}-- {% else %}{{ items.soldeCompte|number_format(0, '.', '')|trim }}{% endif %}{% endif %}{% endfor %}{% endif %}" data-frais="{{ item.fraisTenuCompte|trim }}" data-engagement="{{ item.engagement|trim }}" data-compte="{{ item.numCompte }}" >
-                                                                        &nbsp; &nbsp;<span class="glyphicon glyphicon-file" {% if item.estFacturer|trim == true %} style="pointer-events: none;color:gray;cursor: no-drop" {% else %} style="color:black" {% endif %}></span> &nbsp;Facturer
-                                                                    </a>
-                                                                </div>       
-                                                            </div> -->
+                                                            <div class="dropdown-menu dropdown-menu-right" style="background-color:#F0F0F0;border:1px solid #F0F0F0">
+                                                                <a class="dropdown-item" href="seeModifyClient.php?id=<?php echo $row['idPersonne']?>" style="color:black;"><i class="fas fa-eye"></i>&nbsp;&nbsp;Voir</a>
+                                                                <div class="dropdown-divider" style="color:white;background-color:white;height:2px"></div>
+                                                                <a class="dropdown-item" href="deleteclient.php?id=<?php echo $row['idPersonne']?>" style="color:black"><i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Supprimer</a>
+                                                            </div>
                                                         </div> 
                                                         <!-- <a href="#" class="btn btn-primary edit"><i class="fa fa-edit fa-xs"></i></a>
                                                         <a href="#" class="btn btn-danger trash"><i class="fas fa-trash-alt fa-xs"></i></a> -->
