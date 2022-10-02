@@ -1,82 +1,19 @@
 <?php 
     session_start();
-    require("connexion.php");
-    $message="";
-    if (isset($_POST['submit']) && isset($_POST['nomClient']) && isset($_POST['prenomClient']) && isset($_POST['pays']) && isset($_POST['ville']) &&
-    isset($_POST['email']) && isset($_POST['telPrincipal']) && isset($_POST['telFixe']) && isset($_POST['sexe']) && isset($_POST['metier'])) 
-    {
-        $nom=trim($_POST['nomClient']);
-        $prenom=trim($_POST['prenomClient']);
-        $pays=trim($_POST['pays']);
-        $ville=trim($_POST['ville']);
-        $email=trim($_POST['email']);
-        $telPrincipal=trim($_POST['telPrincipal']);
-        $telFixe=trim($_POST['telFixe']);
-        $sexe=trim($_POST['sexe']);
-        $metier=trim($_POST['metier']);
-        $observation=trim($_POST['observation']);
-        $createur=$_SESSION['username'];
-        $date=date('Y-m-d H:i:s');
-        // if (!filter_var($input_name,FILTER_VALIDATE_REGEXP,array("options"=>array("regexp"=>"/^[a-zA-Z'\s]*$/")))) 
-        // {
-        //     var_dump($input_name);
-        // }
-        // else {
-        //     echo 'Tout va bien';
-        // }
-        $sqlInsertClient="INSERT INTO compteclient (nomPersonne,prenomPersonne,email,numeroFixe,telephone,sexe,metier,paysDeResidence,ville,typeClient,estActif,dateCreation,dateModification,observation,supprimer,createur)
-        VALUES(:nomPersonne,:prenomPersonne,:email,:numeroFixe,:telephone,:sexe,:metier,:paysDeResidence,:ville,:typeClient,:estActif,:dateCreation,:dateModification,:observation,:supprimer,:createur)";
-        $statement=$pdo->prepare($sqlInsertClient);
-        
-        $result=$statement->execute(array(
-            ":nomPersonne"=>$nom,
-            ":prenomPersonne"=>$prenom,
-            ":email"=>$email,
-            ":numeroFixe"=>$telFixe,
-            ":telephone"=>$telPrincipal,
-            ":sexe"=>$sexe,
-            ":metier"=>$metier,
-            ":paysDeResidence"=>$pays,
-            ":ville"=>$ville,
-            ":typeClient"=>'',
-            ":estActif"=>1,
-            ":dateCreation"=>$date,
-            ":dateModification"=>$date,
-            ":observation"=>$observation,
-            ":supprimer"=>0,
-            "createur"=>$createur
-        ));
-        if ($result) 
-        {
-            $message='<div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Enregistrement effectué avec succès</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>';
-        }
-        else 
-        {
-            $message='<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Une erreur s\'est produite.Veuillez réessayer !!!</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>';
-        }
-    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>AFC - Clients</title>
+    <title>AFC - Abonnement</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -86,9 +23,11 @@
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/addclient.css">
+    
+    <link rel="stylesheet" href="css/cient.css">
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -209,7 +148,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="abonnement.php">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        <i class="fas fa-clipboard-list"></i>
                         <span>Abonnement</span></a>
                 </li>
 
@@ -228,7 +167,7 @@
                     <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
                 </div> -->
 
-            </ul>
+        </ul>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -249,6 +188,30 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
 
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
@@ -353,118 +316,60 @@
                                 <h1 class="h3 mb-2 text-gray-800">Liste Clients</h1>
                             <div>
                         </div> -->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <nav aria-label="breadcrumb" style="height:60px;">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="client.php">Clients</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Créer</li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                        
+
                     <div class="row" style="height:60px;">
                         <!-- <div class="col-md-2">
-                            <h2 class="pull-left" style="font-weight:bold;">Nouveau Client</h2>
+                            <h2 style="font-weight:bold;font-size:15px;">Clients</h2>
                         </div> -->
-                        <div class="col-md-10"></div>
+                        <!-- <div class="col-md-10"></div> -->
                         <div class="col-md-2">
-                            <a href="client.php" class="btn btn-primary pull-right"><i class="fa fa-alt"></i>Liste Clients</a>
+                            <!-- <div class="mt-5 mb-3 clearfix"> -->
+                                <h2 class="pull-left" style="font-weight:bold;margin-left:20px;">Liste</h2>
+                                <!-- <a href="create.php" class="btn btn-sm btn-primary pull-right"><i class="fa fa-plus"></i> Add New Employee</a> -->
+                            <!-- </div> -->
+                            <!-- <a href="dashboard.php" class="btn btn-sm btn-primary" style="font-weight:bold;" id="NewClient">
+                                <i class="fa fa-plus" aria-hidden="true" style="font-size:10px;"></i>&nbsp;Nouveau Client
+                            </a> -->
+                        </div>
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2">
+                            <a href="addabonnement.php" class="btn btn-primary pull-right" style="font-size:15px;"><i class="fa fa-plus"></i> Nouvel Abonnement</a>
                         </div>
                     </div>
                     <!-- <button class="btn btn-primary" type="button">
                         <i class="fas fa-search fa-sm"></i>
-                    </button>-->
-                    <div class="form-group">
-                            <?php echo $message; ?>    
-                    </div>
+                    </button> -->
+
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Nouveau Client</h6>
-                        </div>
+                    <div class="card shadow mb-4" id="tabAbonnement">
+                        <!-- <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary" style="font-size:25px;">Liste Clients</h6>
+                        </div> -->
                         <div class="card-body">
-                            <form action="" method="POST">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="nomClient">Nom&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="nomClient" id="nomClient" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="prenomClient">Prénom&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="prenomClient" id="prenomClient" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="pays">Pays De Résidence&nbsp;<span style="color:red">*</span></label>
-                                            <input type="pays" class="form-control" name="pays" id="pays" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="ville">Ville&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="ville" id="ville" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" name="email" id="email">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="telPrincipal">Tel Principal&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" class="form-control" name="telPrincipal" id="telPrincipal" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="telFixe">Tel Fixe</label>
-                                            <input type="text" class="form-control" name="telFixe" id="telFixe">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="sexe">Sexe&nbsp;<span style="color:red">*</span></label>
-                                            <select name="sexe" id="sexe" class="form-control">
-                                                <option value="M">Masculin</option>
-                                                <option value="F">Féminin</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="metier">Métier&nbsp;<span style="color:red">*</span></label>
-                                            <select name="metier" class="form-control" name="metier" id="metier" placeholder="Cliquez ici">
-                                                <option value="Etudiant">Etudiant(e)</option>
-                                                <option value="Commercant">Commercant(e)</option>
-                                                <option value="Artisant">Artisant</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="observation">Observation</label>
-                                            <textarea name="observation" id="observation" cols="3" rows="2" class="form-control"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" name="submit" id="submit" class="form-submit btn btn-primary" value="Enregistrer"/>
-                                </div>
-                            </form>
+                        <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Intitule</th>
+                                            <th>Numéro carte</th>
+                                            <th>Formule</th>
+                                            <th>Mois</th>
+                                            <th>date abonnement</th>
+                                            <th>prochain abonnement</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>AHLONSOU Nicodoss</td>
+                                            <td>0156987423056</td>
+                                            <td>access</td>
+                                            <td>1</td>
+                                            <td>01/09/2022</td>
+                                            <td>01/10/2022</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 

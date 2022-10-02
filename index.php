@@ -45,7 +45,7 @@
             </div> 
         <!-- </div> -->
     
-        <div class="container mt-5">
+        <!-- <div class="container mt-5">
             <div class="row">
                 <div class="col-sm-4">
                     <h3>Column 1</h3>
@@ -63,6 +63,6 @@
                     <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
                 </div>
             </div>
-        </div> 
+        </div>  -->
     </body>
 </html>

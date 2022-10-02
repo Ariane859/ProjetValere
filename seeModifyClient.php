@@ -3,6 +3,79 @@
     require("connexion.php");
     $message="";
     $id=$_GET['id'];
+     
+    if (isset($_POST['submit']) && isset($_POST['nomClient']) && isset($_POST['prenomClient']) && isset($_POST['pays']) && isset($_POST['ville']) &&
+    isset($_POST['email']) && isset($_POST['telPrincipal']) && isset($_POST['telFixe']) && isset($_POST['sexe']) && isset($_POST['metier'])) 
+    {
+        $nom=trim($_POST['nomClient']);
+        $prenom=trim($_POST['prenomClient']);
+        $pays=trim($_POST['pays']);
+        $ville=trim($_POST['ville']);
+        $email=trim($_POST['email']);
+        $telPrincipal=trim($_POST['telPrincipal']);
+        $telFixe=trim($_POST['telFixe']);
+        $sexe=trim($_POST['sexe']);
+        $metier=trim($_POST['metier']);
+        $observation=trim($_POST['observation']);
+        $createur=$_SESSION['username'];
+        $date=date('Y-m-d H:i:s');
+    
+        // $sqlUpdateClient="UPDATE compteclient SET nomPersonne=:nomPersonne,prenomPersonne=:prenomPersonne,email=:email,numeroFixe=:numeroFixe,telephone=:telephone,sexe=:sexe,metier=:metier,paysDeResidence=:paysDeResisence,ville=:ville,dateModification=:dateModification,observation=:observation
+        // where idPersonne=:idPersonne";
+
+        $sqlUpdateClient="UPDATE
+        compteclient
+      SET
+        nomPersonne = :nomPersonne,
+        prenomPersonne = :prenomPersonne,
+        email = :email,
+        numeroFixe = :numeroFixe,
+        telephone = :telephone,
+        sexe = :sexe,
+        metier = :metier,
+        paysDeResidence = :paysDeResidence,
+        ville = :ville,
+        dateModification = :dateModification,
+        observation = :observation
+      where
+        idPersonne = :idPersonne";
+
+        $statement=$pdo->prepare($sqlUpdateClient);
+
+        $resultat=$statement->execute(array(
+            ":nomPersonne"=>$nom,
+            ":prenomPersonne"=>$prenom,
+            ":email"=>$email,
+            ":numeroFixe"=>$telFixe,
+            ":telephone"=>$telPrincipal,
+            ":sexe"=>$sexe,
+            ":metier"=>$metier,
+            ":paysDeResidence"=>$pays,
+            ":ville"=>$ville,
+            ":dateModification"=>$date,
+            ":observation"=>$observation,
+            ":idPersonne"=>$id
+        ));
+        if ($resultat) 
+        {
+            $message='<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Modification effectué avec succès</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        }
+        else 
+        {
+            $message='<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Une erreur s\'est produite.Veuillez réessayer !!!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>';
+        }
+    }
+
     $sqlDetails = 'SELECT distinct* FROM compteclient WHERE idPersonne=:idPersonne';
     if($stmt = $pdo->prepare($sqlDetails)){
         $stmt->bindParam(":idPersonne", $param_id);
@@ -13,64 +86,7 @@
             }
         }
     }
-            
-    // if (isset($_POST['submit']) && isset($_POST['nomClient']) && isset($_POST['prenomClient']) && isset($_POST['pays']) && isset($_POST['ville']) &&
-    // isset($_POST['email']) && isset($_POST['telPrincipal']) && isset($_POST['telFixe']) && isset($_POST['sexe']) && isset($_POST['metier'])) 
-    // {
-    //     $nom=trim($_POST['nomClient']);
-    //     $prenom=trim($_POST['prenomClient']);
-    //     $pays=trim($_POST['pays']);
-    //     $ville=trim($_POST['ville']);
-    //     $email=trim($_POST['email']);
-    //     $telPrincipal=trim($_POST['telPrincipal']);
-    //     $telFixe=trim($_POST['telFixe']);
-    //     $sexe=trim($_POST['sexe']);
-    //     $metier=trim($_POST['metier']);
-    //     $observation=trim($_POST['observation']);
-    //     $createur=$_SESSION['username'];
-    //     $date=date('Y-m-d H:i:s');
-    
-    //     $sqlInsertClient="INSERT INTO compteclient (nomPersonne,prenomPersonne,email,numeroFixe,telephone,sexe,metier,paysDeResidence,ville,typeClient,estActif,dateCreation,dateModification,observation,supprimer,createur)
-    //     VALUES(:nomPersonne,:prenomPersonne,:email,:numeroFixe,:telephone,:sexe,:metier,:paysDeResidence,:ville,:typeClient,:estActif,:dateCreation,:dateModification,:observation,:supprimer,:createur)";
-    //     $statement=$pdo->prepare($sqlInsertClient);
-        
-    //     $result=$statement->execute(array(
-    //         ":nomPersonne"=>$nom,
-    //         ":prenomPersonne"=>$prenom,
-    //         ":email"=>$email,
-    //         ":numeroFixe"=>$telFixe,
-    //         ":telephone"=>$telPrincipal,
-    //         ":sexe"=>$sexe,
-    //         ":metier"=>$metier,
-    //         ":paysDeResidence"=>$pays,
-    //         ":ville"=>$ville,
-    //         ":typeClient"=>'',
-    //         ":estActif"=>1,
-    //         ":dateCreation"=>$date,
-    //         ":dateModification"=>$date,
-    //         ":observation"=>$observation,
-    //         ":supprimer"=>0,
-    //         "createur"=>$createur
-    //     ));
-    //     if ($result) 
-    //     {
-    //         $message='<div class="alert alert-success alert-dismissible fade show" role="alert">
-    //         <strong>Enregistrement effectué avec succès</strong>
-    //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //           <span aria-hidden="true">&times;</span>
-    //         </button>
-    //       </div>';
-    //     }
-    //     else 
-    //     {
-    //         $message='<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    //         <strong>Une erreur s\'est produite.Veuillez réessayer !!!</strong>
-    //         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //           <span aria-hidden="true">&times;</span>
-    //         </button>
-    //       </div>';
-    //     }
-    // }
+       
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,7 +108,7 @@
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/addclient.css">
+    
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
@@ -104,120 +120,137 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center" href="dashboard.php">
+                <!-- Sidebar - Brand -->
+                <!-- <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.php">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <i class="fas fa-laugh-wink"></i>
+                    </div>
+                    <div class="sidebar-brand-text mx-2">Africa Group</div>
+                </a> -->
+                <a class="sidebar-brand d-flex align-items-center" href="dashboard.php">
                     <!-- <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-laugh-wink"></i>
                     </div> -->
                     <div class="sidebar-brand-text mx-2" style="font-size:1.25em;"><span style="font-size:1.5em;">A</span>FRIC'ACTION</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="dashboard.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Tableau de bord</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
+                <!-- Nav Item - Dashboard -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="dashboard.php">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <!-- <div class="sidebar-heading">
+                    Interface
+                </div> -->
+
+                <!-- Nav Item - Pages Collapse Menu -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Components</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Custom Components:</h6>
+                            <a class="collapse-item" href="buttons.html">Buttons</a>
+                            <a class="collapse-item" href="cards.html">Cards</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li> -->
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                        aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-fw fa-wrench"></i>
+                        <span>Utilities</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Custom Utilities:</h6>
+                            <a class="collapse-item" href="utilities-color.html">Colors</a>
+                            <a class="collapse-item" href="utilities-border.html">Borders</a>
+                            <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                            <a class="collapse-item" href="utilities-other.html">Other</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li> -->
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+                <!-- Divider -->
+                <!-- <hr class="sidebar-divider"> -->
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
+                <!-- Heading -->
+                <!-- <div class="sidebar-heading">
+                    Addons
+                </div> -->
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                        aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Pages</span>
+                    </a>
+                    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Login Screens:</h6>
+                            <a class="collapse-item" href="login.html">Login</a>
+                            <a class="collapse-item" href="register.html">Register</a>
+                            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">Other Pages:</h6>
+                            <a class="collapse-item" href="404.html">404 Page</a>
+                            <a class="collapse-item" href="blank.html">Blank Page</a>
+                        </div>
                     </div>
+                </li> -->
+
+                <!-- Nav Item - Charts -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="charts.html">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Charts</span></a>
+                </li> -->
+
+                <!-- Nav Item - Tables -->
+                <li class="nav-item">
+                    <a class="nav-link" href="client.php">
+                        <i class="fas fa-user"></i>
+                        <span>Clients</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="abonnement.php">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        <span>Abonnement</span></a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+
+                <!-- Sidebar Toggler (Sidebar) -->
+                <div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
                 </div>
-            </li>
 
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
+                <!-- Sidebar Message -->
+                <!-- <div class="sidebar-card d-none d-lg-flex">
+                    <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
+                    <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+                    <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+                </div> -->
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item active">
-                <a class="nav-link" href="client.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Clients</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
+            </ul>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -379,19 +412,19 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="nomClient">Nom&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" value="<?php echo $row['nomPersonne'] ?>" class="form-control" name="nomClient" id="nomClient" required>
+                                            <input disabled type="text" value="<?php echo $row['nomPersonne'] ?>" class="form-control" name="nomClient" id="nomClient" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="prenomClient">Prénom&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" value="<?php echo $row['prenomPersonne'] ?>" class="form-control" name="prenomClient" id="prenomClient" required>
+                                            <input disabled type="text" value="<?php echo $row['prenomPersonne'] ?>" class="form-control" name="prenomClient" id="prenomClient" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="pays">Pays De Résidence&nbsp;<span style="color:red">*</span></label>
-                                            <input type="pays" value="<?php echo $row['paysDeResidence'] ?>" class="form-control" name="pays" id="pays" required>
+                                            <input disabled type="pays" value="<?php echo $row['paysDeResidence'] ?>" class="form-control" name="pays" id="pays" required>
                                         </div>
                                     </div>
                                 </div>
@@ -399,19 +432,19 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="ville">Ville&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" value="<?php echo $row['ville'] ?>" class="form-control" name="ville" id="ville" required>
+                                            <input disabled type="text" value="<?php echo $row['ville'] ?>" class="form-control" name="ville" id="ville" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="email" value="<?php echo $row['email'] ?>" class="form-control" name="email" id="email">
+                                            <input disabled type="email" value="<?php echo $row['email'] ?>" class="form-control" name="email" id="email">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="telPrincipal">Tel Principal&nbsp;<span style="color:red">*</span></label>
-                                            <input type="text" value="<?php echo $row['telephone'] ?>" class="form-control" name="telPrincipal" id="telPrincipal" required>
+                                            <input disabled type="text" value="<?php echo $row['telephone'] ?>" class="form-control" name="telPrincipal" id="telPrincipal" required>
                                         </div>
                                     </div>
                                 </div>
@@ -419,13 +452,13 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="telFixe">Tel Fixe</label>
-                                            <input type="text" value="<?php echo $row['numeroFixe'] ?>" class="form-control" name="telFixe" id="telFixe">
+                                            <input disabled type="text" value="<?php echo $row['numeroFixe'] ?>" class="form-control" name="telFixe" id="telFixe">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="sexe">Sexe&nbsp;<span style="color:red">*</span></label>
-                                            <select name="sexe" id="sexe" class="form-control">
+                                            <select disabled name="sexe" id="sexe" class="form-control">
                                                 <option value="M">Masculin</option>
                                                 <option value="F">Féminin</option>
                                             </select>
@@ -434,7 +467,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="metier">Métier&nbsp;<span style="color:red">*</span></label>
-                                            <select name="metier" class="form-control" name="metier" id="metier" placeholder="Cliquez ici">
+                                            <select disabled name="metier" class="form-control" name="metier" id="metier" placeholder="Cliquez ici">
                                                 <option value="Etudiant">Etudiant(e)</option>
                                                 <option value="Commercant">Commercant(e)</option>
                                                 <option value="Artisant">Artisant</option>
@@ -446,13 +479,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="observation">Observation</label>
-                                            <textarea name="observation" id="observation" cols="3" rows="2" class="form-control"><?php echo $row['observation'] ?></textarea>
+                                            <textarea disabled name="observation" id="observation" cols="3" rows="2" class="form-control"><?php echo $row['observation'] ?></textarea>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <button class="btn btn-info" id="ModifierClient">Modifier</button>
-                                    <!-- <input type="submit" name="submit" id="submit" class="form-submit btn btn-primary" value="Enregistrer"/> -->
+                                <div class="form-group ModifierClient">
+                                    <input type="button" name="modifier" class="btn btn-info" id="modifier" value="Modifier">
                                 </div>
                             </form>
                         </div>
@@ -468,7 +500,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; ariane.dalmeida 2022</span>
                     </div>
                 </div>
             </footer>
